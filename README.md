@@ -33,3 +33,7 @@ sh translate <file>.srt
 
 - 📘 [**Whisper** (**OpenAI**) documentation](https://github.com/openai/whisper)
 - 📘 [**Googletrans** documentation](https://github.com/ssut/py-googletrans)
+
+```shell
+FILE=my_audio.mp3 docker compose up -d transcribe
+```
