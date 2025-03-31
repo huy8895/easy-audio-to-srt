@@ -9,4 +9,4 @@ RUN pip install setuptools-rust
 RUN pip install translate-toolkit
 RUN pip install googletrans
 RUN pip install -U openai-whisper
-RUN python -c 'import whisper; whisper.load_model("turbo")'
+RUN python -c 'import whisper; whisper.load_model("tiny")'
