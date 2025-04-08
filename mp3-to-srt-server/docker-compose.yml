@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  slowscribe:
+    build: .
+    container_name: slowscribe-server
+    ports:
+      - "5000:5000"   # Mở cổng webserver Flask
+    volumes:
+      - .:/workspace  # Mount thư mục hiện tại vào container
+    restart: unless-stopped
