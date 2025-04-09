@@ -1,22 +1,10 @@
 services:
   transcribe:
-    build: .
+    image: huy8895/easy-audio-to-srt-transcribe:cached
     container_name: whisper-openai
     working_dir: /workspace
     environment:
       - FILE
     volumes:
       - .:/workspace
-    command: whisper 29-full.mp3 --language en --model tiny --output_format srt --no_speech_threshold 0 --word_timestamps True --max_words_per_line 1 --output_dir /workspace
-#    command: bash -c "whisper 32-test-12.mp3 --language en --model base --output_format srt --word_timestamps True --verbose True --max_words_per_line 5 --output_dir /workspace"
-#    command: bash -c "whisper 32-test-12.mp3 --language en --model base --output_format srt --word_timestamps True --verbose True --max_words_per_line 5 --output_dir /workspace && python3 split_srt.py /workspace/$FILE.srt /workspace/output.srt"
-#    command: whisper $FILE --language en --model base --output_format srt --word_timestamps True --max_words_per_line 5 --output_dir /workspace
-#    command: bash -c "for f in *.mp3; do whisper \"\$f\" --language en --model base --output_format srt -- word_timestamps True --max_words_per_line 5; done"  # translate:  # Comment hoặc xóa phần này nếu không cần
-  #   build: .
-  #   container_name: srt-translator
-  #   working_dir: /workspace
-  #   environment:
-  #     - FILE
-  #   volumes:
-  #     - .:/workspace
-  #   command: python3 translate_srt.py
+    command: whisper "#33-full-v2 (mp3cut.net).mp3" --language en --model small --output_format srt --word_timestamps True --max_words_per_line 1 --output_dir /workspace
