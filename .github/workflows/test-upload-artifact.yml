@@ -1,0 +1,20 @@
+name: Test Upload Artifact v4
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📁 Tạo thư mục và file mẫu
+        run: |
+          mkdir -p path/to/artifact
+          echo "hello" > path/to/artifact/world.txt
+
+      - name: ⬆️ Upload artifact với actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: path/to/artifact/world.txt
