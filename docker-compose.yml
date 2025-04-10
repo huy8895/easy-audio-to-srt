@@ -7,4 +7,5 @@ services:
       - FILE
     volumes:
       - .:/workspace
-    command: whisper "#33-full-v2 (mp3cut.net).mp3" --language en --model small --output_format srt --word_timestamps True --max_words_per_line 1 --output_dir /workspace
+    command: whisper "sample_audio.mp3.mp3" --language en --model tiny --output_format srt --word_timestamps True --max_words_per_line 1 --output_dir /workspace
+    platform: linux/amd64
