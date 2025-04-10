@@ -1,0 +1,53 @@
+name: Transcribe Audio from URL (Local Build)
+
+on:
+  workflow_dispatch:
+    inputs:
+      audio_url:
+        description: 'URL của file audio cần chuyển'
+        required: true
+      output_filename:
+        description: 'Tên file đầu ra (ví dụ: sample.mp3)'
+        required: true
+        default: 'audio.mp3'
+      whisper_model:
+        description: 'Chọn model Whisper (tiny, small, medium, large)'
+        required: true
+        default: 'tiny'
+
+jobs:
+  transcribe:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Tạo thư mục làm việc
+        run: mkdir -p audio
+
+      - name: Tải file audio từ URL
+        run: |
+          curl -L "${{ github.event.inputs.audio_url }}" -o "audio/${{ github.event.inputs.output_filename }}"
+
+      - name: Build Docker image từ Dockerfile trong repo
+        run: docker build -t whisper-local .
+
+      - name: Chạy Whisper bằng image vừa build
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/audio:/workspace \
+            whisper-local \
+            whisper "/workspace/${{ github.event.inputs.output_filename }}" \
+              --language en \
+              --model ${{ github.event.inputs.whisper_model }} \
+              --output_format srt \
+              --word_timestamps True \
+              --max_words_per_line 1 \
+              --output_dir /workspace
+
+      - name: Upload SRT kết quả
+        uses: actions/upload-artifact@v3
+        with:
+          name: transcript
+          path: audio/*.srt
