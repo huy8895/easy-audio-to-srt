@@ -7,7 +7,7 @@ on:
         description: 'URL của file audio cần chuyển'
         required: true
       output_filename:
-        description: 'Tên file đầu ra (ví dụ: sample.mp3)'
+        description: 'Tên file đầu vào (ví dụ: sample.mp3)'
         required: true
         default: 'audio.mp3'
       whisper_model:
@@ -45,8 +45,6 @@ jobs:
       - name: 🎧 Chạy Whisper bằng image vừa build
         run: |
           echo "🎧 Running Whisper with model: ${{ github.event.inputs.whisper_model }}"
-          echo "📥 Input file: /workspace/${{ github.event.inputs.output_filename }}"
-          echo "📤 Output format: SRT"
           docker run --rm \
             -v ${{ github.workspace }}/audio:/workspace \
             whisper-local \
@@ -59,8 +57,8 @@ jobs:
               --output_dir /workspace
           echo "✅ Whisper transcription completed."
 
-      - name: ⬆️ Upload SRT kết quả
-        uses: actions/upload-artifact@v2
+      - name: ⬆️ Upload SRT kết quả với v4
+        uses: actions/upload-artifact@v4
         with:
           name: transcript
           path: audio/*.srt
