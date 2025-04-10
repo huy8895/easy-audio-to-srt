@@ -20,21 +20,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: 🔄 Checkout source code
         uses: actions/checkout@v3
 
-      - name: Tạo thư mục làm việc
-        run: mkdir -p audio
-
-      - name: Tải file audio từ URL
+      - name: 📂 Tạo thư mục làm việc
         run: |
+          echo "📁 Creating 'audio' directory..."
+          mkdir -p audio
+
+      - name: 🌐 Tải file audio từ URL
+        run: |
+          echo "🌐 Downloading audio file from:"
+          echo "URL: ${{ github.event.inputs.audio_url }}"
+          echo "Saving as: audio/${{ github.event.inputs.output_filename }}"
           curl -L "${{ github.event.inputs.audio_url }}" -o "audio/${{ github.event.inputs.output_filename }}"
+          echo "✅ Download completed."
 
-      - name: Build Docker image từ Dockerfile trong repo
-        run: docker build -t whisper-local .
-
-      - name: Chạy Whisper bằng image vừa build
+      - name: 🛠️ Build Docker image từ Dockerfile trong repo
         run: |
+          echo "🛠️ Building Docker image 'whisper-local'..."
+          docker build -t whisper-local .
+          echo "✅ Docker image built successfully."
+
+      - name: 🎧 Chạy Whisper bằng image vừa build
+        run: |
+          echo "🎧 Running Whisper with model: ${{ github.event.inputs.whisper_model }}"
+          echo "📥 Input file: /workspace/${{ github.event.inputs.output_filename }}"
+          echo "📤 Output format: SRT"
           docker run --rm \
             -v ${{ github.workspace }}/audio:/workspace \
             whisper-local \
@@ -45,8 +57,9 @@ jobs:
               --word_timestamps True \
               --max_words_per_line 1 \
               --output_dir /workspace
+          echo "✅ Whisper transcription completed."
 
-      - name: Upload SRT kết quả
+      - name: ⬆️ Upload SRT kết quả
         uses: actions/upload-artifact@v3
         with:
           name: transcript
