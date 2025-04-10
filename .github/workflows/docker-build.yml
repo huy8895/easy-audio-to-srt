@@ -1,9 +1,12 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image by Platform
 
 on:
-  push:
-    branches:
-      - dockerhub-build  # hoặc branch bạn muốn trigger
+  workflow_dispatch:
+    inputs:
+      target_platform:
+        description: 'Choose target platform (amd64 or arm64)'
+        required: true
+        default: 'amd64'
 
 jobs:
   build-and-push:
@@ -22,10 +25,10 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push (multi-arch)
+      - name: Build and push image for selected platform
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: huy8895/easy-audio-to-srt-transcribe:latest
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ github.event.inputs.target_platform }}
+          tags: huy8895/easy-audio-to-srt:${{ github.event.inputs.target_platform }}

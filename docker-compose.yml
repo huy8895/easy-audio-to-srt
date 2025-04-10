@@ -1,6 +1,6 @@
 services:
   transcribe:
-    image: huy8895/easy-audio-to-srt-transcribe:cached
+    image: huy8895/easy-audio-to-srt-transcribe:latest
     container_name: whisper-openai
     working_dir: /workspace
     environment:
@@ -8,4 +8,4 @@ services:
     volumes:
       - .:/workspace
     command: whisper "sample_audio.mp3.mp3" --language en --model tiny --output_format srt --word_timestamps True --max_words_per_line 1 --output_dir /workspace
-    platform: linux/amd64
+    platform: linux/amd64 #nếu là macbook m1 thì thì dùng linux/arm64
