@@ -1,6 +1,6 @@
 services:
   transcribe:
-    image: huy8895/easy-audio-to-srt-transcribe:latest
+    image: huy8895/easy-audio-to-srt:amd64
     container_name: whisper-openai
     working_dir: /workspace
     environment:
